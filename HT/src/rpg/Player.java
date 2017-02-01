@@ -4,24 +4,26 @@ public class Player extends Creature
 {
 	private final int MAXHEALTH = 100;
 	private final int POTIONHEAL = 40;
-	
+
 	private int nPotions;
-	
+
 	public Player(String name)
 	{
 		super(name, 100, 10, 10, 0.95, 0.05, 50);
-		
+
 		this.boolPlayer = true;
 		this.nPotions = 0;
-		
+
 		System.out.println("Welcome to " + EventManager.WORLD + ", " + name + "!");
 	}
-	
+
+	@Override
 	public void dance()
 	{
 		System.out.println("You do a little jig!");
 	}
 	
+	@Override
 	public void drink()
 	{
 		if (health == MAXHEALTH)
