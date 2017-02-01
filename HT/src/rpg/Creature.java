@@ -1,12 +1,11 @@
 package rpg;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Creature
 {
 	protected String name;
-	protected boolean boolPlayer;
+	protected String type;
 
 	protected int health;
 	protected int attack;
@@ -27,33 +26,11 @@ public class Creature
 		this.accuracy = accuracy;
 		this.criticalChance = criticalChance;
 		this.gold = gold;
-
-		this.commands = new HashMap<>();
 	}
 
 	public int swing()
 	{
-		ArrayList<Creature> creatures = EventManager.getCreatures();
-
-		if (creatures.size() > 1)
-		{
-			if (this.accuracy <= Math.random())
-			{
-				if (this.criticalChance <= Math.random())
-					return creatures.get(1).takeDamage(this.attack);
-				else
-					return creatures.get(1).takeDamage(this.attack - creatures.get(1).defense);
-			}
-			else
-			{
-				return -1;
-			}
-		}
-		else
-		{
-			System.out.println("You swing at the air.");
-			return -1;
-		}
+		return 0;
 	}
 
 	public int takeDamage(int damage)
@@ -68,7 +45,7 @@ public class Creature
 
 	public boolean isPlayer()
 	{
-		return boolPlayer;
+		return type.equals("Player");
 	}
 
 	public String getName()

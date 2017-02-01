@@ -1,5 +1,7 @@
 package rpg;
 
+import java.util.ArrayList;
+
 public class Player extends Creature
 {
 	private final int MAXHEALTH = 100;
@@ -11,10 +13,36 @@ public class Player extends Creature
 	{
 		super(name, 100, 10, 10, 0.95, 0.05, 50);
 
-		this.boolPlayer = true;
+		this.type = "Player";
 		this.nPotions = 0;
 
 		System.out.println("Welcome to " + EventManager.WORLD + ", " + name + "!");
+	}
+	
+	// ToDo: Sandwich 
+	
+	@Override
+	public int swing()
+	{
+		ArrayList<Creature> creatures = EventManager.getCreatures();
+
+		if (creatures.size() > 1)
+		{
+			if (this.accuracy <= Math.random())
+			{
+				if (this.criticalChance <= Math.random())
+					return creatures.get(1).takeDamage(this.attack);
+				else
+					return creatures.get(1).takeDamage(this.attack - creatures.get(1).defense);
+			}
+			else
+				return -1;
+		}
+		else
+		{
+			System.out.println("You swing at the air.");
+			return -1;
+		}
 	}
 
 	@Override

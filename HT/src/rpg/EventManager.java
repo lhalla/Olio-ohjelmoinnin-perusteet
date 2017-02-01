@@ -37,8 +37,9 @@ public class EventManager
 	public void initCommands()
 	{
 		commands = new HashMap<>();
-		commands.put("quit", () -> quit());
 		commands.put("dance", () -> creatures.get(0).dance());
+		commands.put("drink", () -> creatures.get(0).drink());
+		commands.put("quit", () -> quit());
 		commands.put("swing", () -> creatures.get(0).swing());
 	}
 
@@ -58,7 +59,11 @@ public class EventManager
 		return creatures;
 	}
 
-	public void quit() {}
+	public void quit()
+	{
+		System.out.println(String.format("We hope to welcome you again soon, %1s!", creatures.get(0).getName()));
+		System.exit(0);
+	}
 
 	public void missSwing(Creature creature)
 	{
