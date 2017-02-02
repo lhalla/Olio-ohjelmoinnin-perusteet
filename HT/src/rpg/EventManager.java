@@ -54,9 +54,14 @@ public class EventManager
 		getCommand();
 	}
 	
-	public static ArrayList<Creature> getCreatures()
+	public static int getCreatureCount()
 	{
-		return creatures;
+		return creatures.size();
+	}
+	
+	public static Creature getCreature(int index)
+	{
+		return creatures.get(index);
 	}
 
 	public void quit()

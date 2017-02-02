@@ -4,6 +4,9 @@ import java.util.HashMap;
 
 public class Creature
 {
+	protected static final int POTIONHEAL = 40;
+	protected static final int SANDWICHHEAL = 30;
+	
 	protected String name;
 	protected String type;
 
@@ -26,6 +29,8 @@ public class Creature
 		this.accuracy = accuracy;
 		this.criticalChance = criticalChance;
 		this.gold = gold;
+		
+		this.type = "Creature";
 	}
 
 	public int swing()
@@ -52,7 +57,28 @@ public class Creature
 	{
 		return name;
 	}
+	
+	public String getType()
+	{
+		return type;
+	}
 
 	public void dance() {}
 	public void drink() {}
+	public void eatSandwich() {}
+	
+	public static void sandwich()
+	{
+		if (EventManager.getCreatureCount() > 1)
+		{
+			System.out.println("You tell the " + EventManager.getCreature(1).getType() + " to make you a sandwich.");
+			System.out.println("You eat the sandwich recovering " + SANDWICHHEAL + " health.");
+		}
+		else
+		{
+			System.out.println("A sandwich manifests itself in front of you. You eat it recovering " + SANDWICHHEAL + " health.");
+		}
+		
+		EventManager.getCreature(0).eatSandwich();
+	}
 }

@@ -1,11 +1,8 @@
 package rpg;
 
-import java.util.ArrayList;
-
 public class Player extends Creature
 {
 	private final int MAXHEALTH = 100;
-	private final int POTIONHEAL = 40;
 
 	private int nPotions;
 
@@ -19,21 +16,19 @@ public class Player extends Creature
 		System.out.println("Welcome to " + EventManager.WORLD + ", " + name + "!");
 	}
 	
-	// ToDo: Sandwich 
-	
 	@Override
 	public int swing()
 	{
-		ArrayList<Creature> creatures = EventManager.getCreatures();
-
-		if (creatures.size() > 1)
+		if (EventManager.getCreatureCount() > 1)
 		{
+			Creature target = EventManager.getCreature(1);
+
 			if (this.accuracy <= Math.random())
 			{
 				if (this.criticalChance <= Math.random())
-					return creatures.get(1).takeDamage(this.attack);
+					return target.takeDamage(this.attack);
 				else
-					return creatures.get(1).takeDamage(this.attack - creatures.get(1).defense);
+					return target.takeDamage(this.attack - target.defense);
 			}
 			else
 				return -1;
@@ -65,8 +60,14 @@ public class Player extends Creature
 		else
 		{
 			System.out.println("You drink a potion healing yourself for " + POTIONHEAL + "!");
-			health += POTIONHEAL;
+			health += Math.min(POTIONHEAL, MAXHEALTH - health);
 			nPotions -= 1;
 		}
+	}
+	
+	@Override
+	public void eatSandwich()
+	{
+		health += Math.min(SANDWICHHEAL, MAXHEALTH - health);
 	}
 }
