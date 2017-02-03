@@ -6,20 +6,23 @@ import java.util.Scanner;
 
 public class EventManager
 {
+	private boolean playerAtVendor;
+	private boolean playerInCombat;
+	
+	// A Scanner for reading user input.
+	private Scanner reader;
+	
 	// World name
 	public static final String WORLD = "Craptopia";
 
 	// An ArrayList for the current Creatures
 	private static ArrayList<Creature> creatures;
 	
-	// A HashMap for all recognised user commands
+	// A HashMap for all recognized user commands
 	private HashMap<String, Runnable> commands;
 	
-	// A Scanner for reading user input.
-	private Scanner reader;
-
 	/*
-	 * Constructor. Initializes the Scanner and Creature list, spawns the Player character and initialises the command list.
+	 * Constructor. Initializes the Scanner and Creature list, spawns the Player character and initializes the command list.
 	 */
 	public EventManager()
 	{
@@ -37,7 +40,7 @@ public class EventManager
 	/*
 	 * Prints an introductory message to the player.
 	 */
-	public void introduction()
+	private void introduction()
 	{
 		System.out.println("Copyright (c) 2017 Lauri & Mikael. All rights reserved.\n");
 	}
@@ -45,19 +48,21 @@ public class EventManager
 	/*
 	 * Initializes the dictionary of known user commands.
 	 */
-	public void initCommands()
+	private void initCommands()
 	{
 		commands = new HashMap<>();
-		commands.put("dance",                   () -> Player.dance());
+		commands.put("dance",                   () -> creatures.get(0).dance());
 		commands.put("drink",                   () -> creatures.get(0).drink());
+		commands.put("leave",                   () -> leaveShop());
 		commands.put("quit",                    () -> quit());
-		commands.put("sudo make me a sandwich", () -> Creature.sandwich());
+		commands.put("shop",                    () -> enterShop());
+		commands.put("sudo make me a sandwich", () -> creatures.get(0).sandwich());
 	}
 	
 	/*
 	 * Prompts the user for a command input. If the input is recognized, it is executed.
 	 */
-	public void getCommand()
+	private void getCommand()
 	{
 		System.out.print(": ");
 		String input = reader.nextLine().toLowerCase();
@@ -67,8 +72,11 @@ public class EventManager
 
 		getCommand();
 	}
-
-	public void quit()
+	
+	/**
+	 * Quits the game.
+	 */
+	private void quit()
 	{
 		System.out.println(String.format("We hope to welcome you again soon, %1s!", creatures.get(0).getName()));
 		
@@ -111,15 +119,57 @@ public class EventManager
 	{
 		return creatures.size();
 	}
+	
+	private void killVendor()
+	{
+		creatures.remove(1);
+		this.playerAtVendor = false;
+	}
 
 	/**
 	 * Asks the user for a name for their character and then spawns it.
 	 */
-	public void spawnPlayer()
+	private void spawnPlayer()
 	{
 		System.out.print("Please enter your name: ");
 		creatures.add(new Player(reader.nextLine()));
 	}
 	
+	private void spawnVendor()
+	{
+		creatures.add(new Vendor());
+		this.playerAtVendor = true;
+	}
+	
 	/* COMBAT METHODS */
+	
+	/* VENDOR METHODS */
+	
+	private void enterShop()
+	{
+		if (playerAtVendor || playerInCombat)
+		{
+			System.out.println("You can't do that right now.");
+		}
+		else
+		{
+			spawnVendor();
+			System.out.println(String.format("You go to town and find %1s the %2s.", creatures.get(1).getName(), creatures.get(1).getType()));
+			getCommand();
+		}
+	}
+	
+	private void leaveShop()
+	{
+		if (!playerAtVendor || playerInCombat)
+		{
+			System.out.println("You can't do that right now.");
+		}
+		else
+		{
+			killVendor();
+			System.out.println("You leave the shop and return on your adventure.");
+			getCommand();
+		}
+	}
 }

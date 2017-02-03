@@ -31,8 +31,15 @@ public class Creature
 		this.gold = gold;
 		
 		this.type = "Creature";
+		commands = new HashMap<>();
 	}
-
+	
+	public boolean canAfford(int price)
+	{
+		return false;
+	}
+	
+	public void dance() {}
 	public void drink() {}
 	public void eatSandwich() {}
 
@@ -51,18 +58,7 @@ public class Creature
 		return type.equals("Player");
 	}
 	
-	public static void sandwich()
-	{
-		if (EventManager.getCreatureCount() > 1)
-		{
-			System.out.println("You tell the " + EventManager.getCreature(1).getType() + " to make you a sandwich.");
-			System.out.println("You eat the sandwich recovering " + SANDWICHHEAL + " health.");
-		}
-		else
-		{
-			System.out.println("A sandwich manifests itself in front of you. You eat it recovering " + SANDWICHHEAL + " health.");
-		}
-		
-		EventManager.getCreature(0).eatSandwich();
-	}
+	public void sandwich() {}
+	public void upgradeAttack(int cost) {}
+	public void upgradeDefense(int cost) {}
 }

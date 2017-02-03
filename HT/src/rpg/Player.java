@@ -13,10 +13,15 @@ public class Player extends Creature
 		this.type = "Player";
 		this.nPotions = 0;
 
-		System.out.println("Welcome to " + EventManager.WORLD + ", " + name + "!");
+		System.out.println(String.format("Welcome to %1s, %2s!", EventManager.WORLD, name));
 	}
 
-	public static void dance()
+	public boolean canAfford(double price)
+	{
+		return gold >= price;
+	}
+	
+	public void dance()
 	{
 		System.out.println("You do a little jig!");
 	}
@@ -24,13 +29,13 @@ public class Player extends Creature
 	@Override
 	public void drink()
 	{
-		if (health == MAXHEALTH)
-		{
-			System.out.println("You are already at full health!");
-		}
-		else if (nPotions < 1)
+		if (nPotions < 1)
 		{
 			System.out.println("You are out of potions!");
+		}
+		else if (health == MAXHEALTH)
+		{
+			System.out.println("You are already at full health!");
 		}
 		else
 		{
@@ -44,5 +49,32 @@ public class Player extends Creature
 	public void eatSandwich()
 	{
 		health += Math.min(SANDWICHHEAL, MAXHEALTH - health);
+	}
+	
+	public void sandwich()
+	{
+		if (EventManager.getCreatureCount() > 1)
+		{
+			System.out.println("You tell the " + EventManager.getCreature(1).getType() + " to make you a sandwich.");
+			System.out.println("You eat the sandwich recovering " + SANDWICHHEAL + " health.");
+		}
+		else
+		{
+			System.out.println("A sandwich manifests itself in front of you. You eat it recovering " + SANDWICHHEAL + " health.");
+		}
+		
+		EventManager.getCreature(0).eatSandwich();
+	}
+	
+	public void upgradeAttack(int cost)
+	{
+		attack += 1;
+		gold -= cost;
+	}
+	
+	public void upgradeDefense(int cost)
+	{
+		defense += 1;
+		gold -= cost;
 	}
 }
