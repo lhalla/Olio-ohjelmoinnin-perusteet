@@ -19,7 +19,8 @@ public class EventManager
 	private static ArrayList<Creature> creatures;
 	
 	// A HashMap for all recognized user commands
-	private HashMap<String, Runnable> commands;
+	private HashMap<String, Runnable> generalCommands;
+	private HashMap<String, Runnable> vendorCommands;
 	
 	/*
 	 * Constructor. Initializes the Scanner and Creature list, spawns the Player character and initializes the command list.
@@ -32,6 +33,7 @@ public class EventManager
 		introduction();
 		spawnPlayer();
 		initCommands();
+		initVendorCommands();
 		getCommand();
 	}
 	
@@ -50,13 +52,22 @@ public class EventManager
 	 */
 	private void initCommands()
 	{
-		commands = new HashMap<>();
-		commands.put("dance",                   () -> creatures.get(0).dance());
-		commands.put("drink",                   () -> creatures.get(0).drink());
-		commands.put("leave",                   () -> leaveShop());
-		commands.put("quit",                    () -> quit());
-		commands.put("shop",                    () -> enterShop());
-		commands.put("sudo make me a sandwich", () -> creatures.get(0).sandwich());
+		generalCommands = new HashMap<>();
+		generalCommands.put("dance",                   () -> creatures.get(0).dance());
+		generalCommands.put("drink",                   () -> creatures.get(0).drink());
+		generalCommands.put("quit",                    () -> quit());
+		generalCommands.put("shop",                    () -> enterShop());
+		generalCommands.put("sudo make me a sandwich", () -> creatures.get(0).sandwich());
+	}
+	
+	public void initVendorCommands()
+	{
+		vendorCommands = new HashMap<>();
+		vendorCommands.put("leave",                   () -> leaveShop());
+		vendorCommands.put("list prices",             () -> creatures.get(1).listPrices());
+		vendorCommands.put("sudo make me a sandwich", () -> creatures.get(0).sandwich());
+		vendorCommands.put("upgrade attack",          () -> creatures.get(1).upgradeAttack());
+		vendorCommands.put("upgrade defense",         () -> creatures.get(1).upgradeDefense());
 	}
 	
 	/*
@@ -67,8 +78,8 @@ public class EventManager
 		System.out.print(": ");
 		String input = reader.nextLine().toLowerCase();
 
-		if (commands.containsKey(input))
-			commands.get(input).run();
+		if (generalCommands.containsKey(input))
+			generalCommands.get(input).run();
 
 		getCommand();
 	}
@@ -155,8 +166,19 @@ public class EventManager
 		{
 			spawnVendor();
 			System.out.println(String.format("You go to town and find %1s the %2s.", creatures.get(1).getName(), creatures.get(1).getType()));
-			getCommand();
+			getShopCommand();
 		}
+	}
+	
+	private void getShopCommand()
+	{
+		System.out.print(": ");
+		String input = reader.nextLine().toLowerCase();
+
+		if (vendorCommands.containsKey(input))
+			vendorCommands.get(input).run();
+
+		getShopCommand();
 	}
 	
 	private void leaveShop()

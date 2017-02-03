@@ -1,7 +1,5 @@
 package rpg;
 
-import java.util.HashMap;
-
 public class Creature
 {
 	protected static final int POTIONHEAL = 40;
@@ -18,8 +16,6 @@ public class Creature
 	protected String name;
 	protected String type;
 
-	protected HashMap<String, Runnable> commands;
-
 	public Creature(String name, int health, int attack, int defense, double accuracy, double criticalChance, int gold)
 	{
 		this.name = name;
@@ -31,18 +27,32 @@ public class Creature
 		this.gold = gold;
 		
 		this.type = "Creature";
-		commands = new HashMap<>();
 	}
 	
 	public boolean canAfford(int price)
 	{
-		return false;
+		return gold >= price;
 	}
 	
 	public void dance() {}
 	public void drink() {}
 	public void eatSandwich() {}
 
+	public int getAttack()
+	{
+		return attack;
+	}
+	
+	public int getDefense()
+	{
+		return defense;
+	}
+	
+	public int getGold()
+	{
+		return gold;
+	}
+	
 	public String getName()
 	{
 		return name;
@@ -58,7 +68,10 @@ public class Creature
 		return type.equals("Player");
 	}
 	
+	public void listPrices() {}
 	public void sandwich() {}
+	public void upgradeAttack() {}
 	public void upgradeAttack(int cost) {}
+	public void upgradeDefense() {}
 	public void upgradeDefense(int cost) {}
 }

@@ -15,11 +15,6 @@ public class Player extends Creature
 
 		System.out.println(String.format("Welcome to %1s, %2s!", EventManager.WORLD, name));
 	}
-
-	public boolean canAfford(double price)
-	{
-		return gold >= price;
-	}
 	
 	public void dance()
 	{
