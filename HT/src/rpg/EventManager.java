@@ -6,43 +6,57 @@ import java.util.Scanner;
 
 public class EventManager
 {
+	// World name
 	public static final String WORLD = "Craptopia";
 
+	// An ArrayList for the current Creatures
 	private static ArrayList<Creature> creatures;
+	
+	// A HashMap for all recognised user commands
 	private HashMap<String, Runnable> commands;
+	
+	// A Scanner for reading user input.
 	private Scanner reader;
 
+	/*
+	 * Constructor. Initializes the Scanner and Creature list, spawns the Player character and initialises the command list.
+	 */
 	public EventManager()
 	{
-		this.reader = new Scanner(System.in);
+		reader = new Scanner(System.in);
 		creatures = new ArrayList<>();
 
 		introduction();
-		createPlayer();
+		spawnPlayer();
 		initCommands();
 		getCommand();
 	}
-
+	
+	/* GENERAL METHODS */
+	
+	/*
+	 * Prints an introductory message to the player.
+	 */
 	public void introduction()
 	{
 		System.out.println("Copyright (c) 2017 Lauri & Mikael. All rights reserved.\n");
 	}
 
-	public void createPlayer()
-	{
-		System.out.print("Please enter your name: ");
-		creatures.add(new Player(reader.nextLine()));
-	}
-
+	/*
+	 * Initializes the dictionary of known user commands.
+	 */
 	public void initCommands()
 	{
 		commands = new HashMap<>();
-		commands.put("dance", () -> creatures.get(0).dance());
-		commands.put("drink", () -> creatures.get(0).drink());
-		commands.put("quit", () -> quit());
-		commands.put("swing", () -> creatures.get(0).swing());
+		commands.put("dance",                   () -> Player.dance());
+		commands.put("drink",                   () -> creatures.get(0).drink());
+		commands.put("quit",                    () -> quit());
+		commands.put("sudo make me a sandwich", () -> Creature.sandwich());
 	}
-
+	
+	/*
+	 * Prompts the user for a command input. If the input is recognized, it is executed.
+	 */
 	public void getCommand()
 	{
 		System.out.print(": ");
@@ -53,25 +67,59 @@ public class EventManager
 
 		getCommand();
 	}
-	
-	public static int getCreatureCount()
-	{
-		return creatures.size();
-	}
-	
-	public static Creature getCreature(int index)
-	{
-		return creatures.get(index);
-	}
 
 	public void quit()
 	{
 		System.out.println(String.format("We hope to welcome you again soon, %1s!", creatures.get(0).getName()));
+		
+		try
+		{
+			Thread.sleep(3000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		
 		System.exit(0);
 	}
 
-	public void missSwing(Creature creature)
+	/* CREATURE HANDLING METHODS */
+	
+	/**
+	 * Returns the requested spawned Creature.
+	 * @param index, 
+	 * @return
+	 */
+	public static Creature getCreature(int index)
 	{
-		System.out.println(creature.isPlayer() ? "You swing and you miss!" : creature.getName() + " tries to attack but misses!");
+		if (0 <= index && index < creatures.size())
+		{
+			return creatures.get(index);
+		}
+		else
+		{
+			return null;
+		}
 	}
+	
+	/**
+	 * Returns the current number of spawned Creatures.
+	 * @return
+	 */
+	public static int getCreatureCount()
+	{
+		return creatures.size();
+	}
+
+	/**
+	 * Asks the user for a name for their character and then spawns it.
+	 */
+	public void spawnPlayer()
+	{
+		System.out.print("Please enter your name: ");
+		creatures.add(new Player(reader.nextLine()));
+	}
+	
+	/* COMBAT METHODS */
 }

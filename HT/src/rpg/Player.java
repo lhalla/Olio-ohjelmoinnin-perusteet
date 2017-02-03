@@ -15,33 +15,8 @@ public class Player extends Creature
 
 		System.out.println("Welcome to " + EventManager.WORLD + ", " + name + "!");
 	}
-	
-	@Override
-	public int swing()
-	{
-		if (EventManager.getCreatureCount() > 1)
-		{
-			Creature target = EventManager.getCreature(1);
 
-			if (this.accuracy <= Math.random())
-			{
-				if (this.criticalChance <= Math.random())
-					return target.takeDamage(this.attack);
-				else
-					return target.takeDamage(this.attack - target.defense);
-			}
-			else
-				return -1;
-		}
-		else
-		{
-			System.out.println("You swing at the air.");
-			return -1;
-		}
-	}
-
-	@Override
-	public void dance()
+	public static void dance()
 	{
 		System.out.println("You do a little jig!");
 	}

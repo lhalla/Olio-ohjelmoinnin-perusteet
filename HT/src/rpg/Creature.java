@@ -6,17 +6,17 @@ public class Creature
 {
 	protected static final int POTIONHEAL = 40;
 	protected static final int SANDWICHHEAL = 30;
+
+	protected int attack;
+	protected int defense;
+	protected int gold;
+	protected int health;
+	
+	protected double accuracy;
+	protected double criticalChance;
 	
 	protected String name;
 	protected String type;
-
-	protected int health;
-	protected int attack;
-	protected int defense;
-	protected double accuracy;
-	protected double criticalChance;
-
-	protected int gold;
 
 	protected HashMap<String, Runnable> commands;
 
@@ -33,25 +33,8 @@ public class Creature
 		this.type = "Creature";
 	}
 
-	public int swing()
-	{
-		return 0;
-	}
-
-	public int takeDamage(int damage)
-	{
-		this.health -= damage;
-
-		if (this.health <= 0)
-			return -2;
-
-		return damage;
-	}
-
-	public boolean isPlayer()
-	{
-		return type.equals("Player");
-	}
+	public void drink() {}
+	public void eatSandwich() {}
 
 	public String getName()
 	{
@@ -63,9 +46,10 @@ public class Creature
 		return type;
 	}
 
-	public void dance() {}
-	public void drink() {}
-	public void eatSandwich() {}
+	public boolean isPlayer()
+	{
+		return type.equals("Player");
+	}
 	
 	public static void sandwich()
 	{
