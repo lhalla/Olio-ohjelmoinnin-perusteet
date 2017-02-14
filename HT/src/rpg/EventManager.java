@@ -22,35 +22,34 @@ public class EventManager
 	private HashMap<String, Runnable> generalCommands;
 	private HashMap<String, Runnable> vendorCommands;
 	
-	/*
+	/**
 	 * Constructor. Initializes the Scanner and Creature list, spawns the Player character and initializes the command list.
 	 */
 	public EventManager()
 	{
+		System.out.println("Copyright (c) 2017 Lauri & Mikael. All rights reserved.\n");
+		
 		reader = new Scanner(System.in);
 		creatures = new ArrayList<>();
 
-		introduction();
 		spawnPlayer();
 		initCommands();
-		initVendorCommands();
 		getCommand();
 	}
 	
 	/* GENERAL METHODS */
-	
-	/*
-	 * Prints an introductory message to the player.
-	 */
-	private void introduction()
-	{
-		System.out.println("Copyright (c) 2017 Lauri & Mikael. All rights reserved.\n");
-	}
 
-	/*
-	 * Initializes the dictionary of known user commands.
+	/**
+	 * Initializes the dictionaries of known user commands.
 	 */
 	private void initCommands()
+	{
+		initGeneralCommands();
+		initVendorCommands();
+		System.out.println("Commands initialized.");
+	}
+	
+	private void initGeneralCommands()
 	{
 		generalCommands = new HashMap<>();
 		generalCommands.put("dance",                   () -> creatures.get(0).dance());
@@ -60,7 +59,7 @@ public class EventManager
 		generalCommands.put("sudo make me a sandwich", () -> creatures.get(0).sandwich());
 	}
 	
-	public void initVendorCommands()
+	private void initVendorCommands()
 	{
 		vendorCommands = new HashMap<>();
 		vendorCommands.put("leave",                   () -> leaveShop());
@@ -70,7 +69,7 @@ public class EventManager
 		vendorCommands.put("upgrade defense",         () -> creatures.get(1).upgradeDefense());
 	}
 	
-	/*
+	/**
 	 * Prompts the user for a command input. If the input is recognized, it is executed.
 	 */
 	private void getCommand()
@@ -78,8 +77,16 @@ public class EventManager
 		System.out.print(": ");
 		String input = reader.nextLine().toLowerCase();
 
-		if (generalCommands.containsKey(input))
-			generalCommands.get(input).run();
+		if (playerAtVendor)
+		{
+			if (vendorCommands.containsKey(input))
+				vendorCommands.get(input).run();
+		}
+		else
+		{
+			if (generalCommands.containsKey(input))
+				generalCommands.get(input).run();
+		}
 
 		getCommand();
 	}
@@ -89,7 +96,7 @@ public class EventManager
 	 */
 	private void quit()
 	{
-		System.out.println(String.format("We hope to welcome you again soon, %1s!", creatures.get(0).getName()));
+		System.out.println(String.format("We hope to welcome you again soon, %s!", creatures.get(0).getName()));
 		
 		try
 		{
@@ -165,20 +172,9 @@ public class EventManager
 		else
 		{
 			spawnVendor();
-			System.out.println(String.format("You go to town and find %1s the %2s.", creatures.get(1).getName(), creatures.get(1).getType()));
-			getShopCommand();
+			System.out.println(String.format("You go to town and find %s the %s.", creatures.get(1).getName(), creatures.get(1).getType()));
+			getCommand();
 		}
-	}
-	
-	private void getShopCommand()
-	{
-		System.out.print(": ");
-		String input = reader.nextLine().toLowerCase();
-
-		if (vendorCommands.containsKey(input))
-			vendorCommands.get(input).run();
-
-		getShopCommand();
 	}
 	
 	private void leaveShop()
