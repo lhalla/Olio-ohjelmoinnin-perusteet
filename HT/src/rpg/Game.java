@@ -1,4 +1,4 @@
-package rpg2;
+package rpg;
 
 public class Game
 {

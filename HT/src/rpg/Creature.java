@@ -1,56 +1,35 @@
 package rpg;
 
-public class Creature
-{
-	protected static final int POTIONHEAL = 40;
-	protected static final int SANDWICHHEAL = 30;
+import java.io.Serializable;
 
-	protected int attack;
-	protected int defense;
-	protected int gold;
+/**
+ * A serialisable abstract class for creatures used in the game.
+ * @author Lauri Halla-aho, Mikael Remes
+ *
+ */
+public abstract class Creature implements Serializable
+{
+	protected static final long serialVersionUID = 1L;
+
+	protected String name;
+	
 	protected int health;
 	
-	protected double accuracy;
-	protected double criticalChance;
+	// Every creature is by default alive
+	protected boolean alive = true;
 	
-	protected String name;
-	protected String type;
-
-	public Creature(String name, int health, int attack, int defense, double accuracy, double criticalChance, int gold)
+	/**
+	 * An empty constructor called when a save is loaded.
+	 */
+	public Creature()
+	{
+		
+	}
+	
+	public Creature(String name, int health)
 	{
 		this.name = name;
 		this.health = health;
-		this.attack = attack;
-		this.defense = defense;
-		this.accuracy = accuracy;
-		this.criticalChance = criticalChance;
-		this.gold = gold;
-		
-		this.type = "Creature";
-	}
-	
-	public boolean canAfford(int price)
-	{
-		return gold >= price;
-	}
-	
-	public void dance() {}
-	public void drink() {}
-	public void eatSandwich() {}
-
-	public int getAttack()
-	{
-		return attack;
-	}
-	
-	public int getDefense()
-	{
-		return defense;
-	}
-	
-	public int getGold()
-	{
-		return gold;
 	}
 	
 	public String getName()
@@ -58,20 +37,8 @@ public class Creature
 		return name;
 	}
 	
-	public String getType()
+	public boolean isAlive()
 	{
-		return type;
+		return alive;
 	}
-
-	public boolean isPlayer()
-	{
-		return type.equals("Player");
-	}
-	
-	public void listPrices() {}
-	public void sandwich() {}
-	public void upgradeAttack() {}
-	public void upgradeAttack(int cost) {}
-	public void upgradeDefense() {}
-	public void upgradeDefense(int cost) {}
 }

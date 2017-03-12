@@ -1,4 +1,4 @@
-package rpg;
+package rpgold;
 
 public class RPG
 {
